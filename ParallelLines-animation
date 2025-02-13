@@ -1,0 +1,34 @@
+gsap.registerPlugin(ScrollTrigger);
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    gsap.from(".line-1", { 
+        x: "-100%", 
+        duration: 1.5, 
+        ease: "power2.out",
+        markers: true,
+        scrollTrigger: {
+            trigger: ".line-1",
+            start: "top 100%",
+            end: "bottom 40%",
+            scrub: 1,
+            toggleActions: "restart pause reset",
+            
+        }
+    });
+    gsap.from(".line-2", { 
+        x: "100%", 
+        duration: 1.5, 
+        ease: "power2.out",
+        markers: true,
+        scrollTrigger: {
+            trigger: ".line-1",
+            start: "top 100%",
+            end: "bottom 40%",
+            scrub: 1,
+            toggleActions: "restart pause reset",
+            
+        }
+    });
+});
