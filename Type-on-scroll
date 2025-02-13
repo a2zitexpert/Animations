@@ -1,0 +1,86 @@
+//TYPING TEXT ON SCROLL
+const textToInsert = "With that said… Here’s how you play 3v3v3";// Text content to type
+const wordsToInsert = textToInsert.split(" "); // Split text into an array of words
+
+let index = 0; // Current word index
+let isTyping = false; // Typing status
+let scrollCount = 0; // Counter to accumulate scroll events
+const scrollThreshold = 10; // Number of scrolls required to type/delete one word
+let lastScrollY = 0; // Last recorded scroll position
+
+// Function to type the next word
+function typeNextWord() {
+  const typingElement = document.querySelector(".text-a"); // Target `.text-a`
+
+  if (index < wordsToInsert.length) {
+    if (index > 0) typingElement.innerHTML += " "; // Add space between words
+    typingElement.innerHTML += wordsToInsert[index]; // Add the next word
+    index++; // Increment word index
+  }
+}
+
+// Function to delete the previous word
+function deletePreviousWord() {
+  const typingElement = document.querySelector(".text-a"); // Target `.text-a`
+
+  if (index > 0) {
+    const currentText = typingElement.innerHTML.trim(); // Get the current text
+    const updatedText = currentText.split(" ").slice(0, -1).join(" "); // Remove the last word
+    typingElement.innerHTML = updatedText; // Update the text
+    index--; // Decrement word index
+  }
+}
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
+ScrollTrigger.create({
+  trigger: ".player-scroll-sec .row-1", // Use `.row-1` as the trigger for animation
+  start: "top 40%", // Animation starts when `.row-1` enters viewport
+  end: "bottom top", // Animation ends when `.row-1` exits viewport
+  onEnter: () => {
+    isTyping = true; // Enable typing
+    window.addEventListener("scroll", handleScroll);
+  },
+  onLeave: () => resetTyping(), // Reset typing when leaving
+  onLeaveBack: () => resetTyping(), // Reset typing when scrolling back up
+  onEnterBack: () => {
+    isTyping = true; // Enable typing again when re-entering
+    window.addEventListener("scroll", handleScroll);
+  },
+});
+
+// Reset typing state
+function resetTyping() {
+  index = 0; // Reset word index
+  scrollCount = 0; // Reset scroll counter
+  document.querySelector(".text-a").innerHTML = ""; // Clear `.text-a` content
+  isTyping = false; // Disable typing
+  window.removeEventListener("scroll", handleScroll); // Remove event listener
+}
+
+// Handle scroll events
+function handleScroll() {
+  const currentScrollY = window.scrollY;
+
+  // Increment scroll count on scroll
+  if (currentScrollY > lastScrollY) {
+    // Scrolling down
+    scrollCount++;
+    if (scrollCount >= scrollThreshold) {
+      typeNextWord(); // Type a word after reaching the scroll threshold
+      scrollCount = 0; // Reset scroll count
+    }
+  } else if (currentScrollY < lastScrollY) {
+    // Scrolling up
+    scrollCount++;
+    if (scrollCount >= scrollThreshold) {
+      deletePreviousWord(); // Delete a word after reaching the scroll threshold
+      scrollCount = 0; // Reset scroll count
+    }
+  }
+
+  // Update last scroll position
+  lastScrollY = currentScrollY;
+}
+
