@@ -1,0 +1,12 @@
+		gsap.to(".home-sec-3d .marque-text", {
+    x:"-173%",
+    duration: 1,
+    scrollTrigger: {
+		scroller:"body",
+      trigger: ".home-sec-3d",    
+      start: "top 0%",         
+      end: "top -80%",             
+      scrub:1,
+		pin:true,
+    }
+		});
