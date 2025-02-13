@@ -1,0 +1,67 @@
+gsap.registerPlugin(ScrollTrigger);
+// Default behavior for all screen sizes
+gsap.to("header .logo", {
+  width: "15%",
+  duration: 1,
+  scrollTrigger: {
+    trigger: "body",       // The element to trigger the animation
+    start: "top 0%",       // Trigger the animation when the top of the element hits 0% of the viewport
+    end: "top -100%",      // End the animation when the top reaches -100% of the viewport
+    scrub: 3
+  }
+});
+
+ScrollTrigger.matchMedia({
+  "(min-width: 981px)": function() {
+    gsap.to("header .logo", {
+      scrollTrigger: {
+        trigger: "body",
+        start: "top 0%",
+        end: "top -100%",
+        scrub: 3,
+        onLeave: () => {
+          // Add CSS styles when the animation completes
+          gsap.to("header .logo", { 
+            filter: "invert(1) brightness(100)", 
+            duration: 0.5 
+          });
+
+          // Show .et_mobile_nav_menu
+          gsap.to("header .et_mobile_nav_menu", { 
+            display: "block", 
+            opacity: 1, 
+            duration: 0.5 
+          });
+
+          // Hide .et_pb_menu__menu
+          gsap.to("header .et_pb_menu__menu", { 
+            display: "none", 
+            opacity: 0, 
+            duration: 0.5 
+          });
+        },
+        onEnterBack: () => {
+          // Revert CSS styles when scrolling back
+          gsap.to("header .logo", { 
+            filter: "invert(0) brightness(1)", 
+            duration: 0.5 
+          });
+
+          // Hide .et_mobile_nav_menu
+          gsap.to("header .et_mobile_nav_menu", { 
+            display: "none", 
+            opacity: 0, 
+            duration: 0.5 
+          });
+
+          // Show .et_pb_menu__menu
+          gsap.to("header .et_pb_menu__menu", { 
+            display: "block", 
+            opacity: 1, 
+            duration: 0.5 
+          });
+        }
+      }
+    });
+  }
+});
