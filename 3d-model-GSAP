@@ -1,0 +1,19 @@
+ScrollTrigger.matchMedia({
+  // Condition for screens above 768px
+  "(min-width: 769px)": function() {
+    ScrollTrigger.create({
+      trigger: '.home-sec-3d',  // The element to track
+      start: 'top top',         // When .home-sec-3d reaches the top of the viewport
+      onEnter: () => {
+          const element = document.querySelector('.home-sec-3d');
+          // Add the class to apply the styles
+          element.classList.add('fixed-home-sec-3d');
+      },
+      onLeaveBack: () => {
+          const element = document.querySelector('.home-sec-3d');
+          // Remove the class when scrolling back
+          element.classList.remove('fixed-home-sec-3d');
+      }
+    });
+  }
+});
